@@ -2,6 +2,8 @@ package business.counter;
 
 public class DocumentCounterImpl implements DocumentCounter {
 
+    private ParagraphCounter paragraphCounter;
+
     @Override
     public int countParagraph(String text) {
 
@@ -11,18 +13,18 @@ public class DocumentCounterImpl implements DocumentCounter {
     @Override
     public int countLine(String text) {
 
-        return text.split("\n").length;
+        return paragraphCounter.countLine(text);
     }
 
     @Override
     public int countWord(String text) {
 
-        return text.split(" ").length;
+        return paragraphCounter.countWord(text);
     }
 
     @Override
     public int countChar(String text) {
 
-        return text.length();
+        return paragraphCounter.countChar(text);
     }
 }

@@ -2,6 +2,8 @@ package business.counter;
 
 public class LineCounterImpl implements LineCounter {
 
+    private WordCounter wordCounter;
+
     @Override
     public int countWord(String text) {
 
@@ -11,6 +13,6 @@ public class LineCounterImpl implements LineCounter {
     @Override
     public int countChar(String text) {
 
-        return text.length();
+        return wordCounter.countChar(text);
     }
 }
