@@ -1,10 +1,13 @@
 package business;
 
+import data.FileHandler;
+
 public class TextSaver implements Text {
 
     @Override
     public String operation(String textStr) {
-        return null;
+        FileHandler.getDefaultFileHandler().save(textStr);
+        return "Saved!";
     }
 
 }

@@ -1,6 +1,7 @@
 package data;
 
 import java.io.File;
+import java.io.IOException;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
@@ -11,12 +12,20 @@ public class FileHandler {
 
     private final String directoryName = "files";
     private File storage;
+    private String fileName;
+    private static FileHandler fileHandler;
+
     public FileHandler() {
-        storage = new File(directoryName);
+        this.storage = new File(directoryName);
+        this.fileName = "defoult";
     }
-    public void save(String text, String fileName) throws Exception {
-        Path path = Paths.get(directoryName + "/" + fileName);
-        Files.write(path, text.getBytes());
+    public void save(String text) {
+        Path path = Paths.get(this.directoryName + "/" + this.fileName);
+        try {
+            Files.write(path, text.getBytes());
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
     }
 
     public List<String> getAllFiles() {
@@ -25,5 +34,16 @@ public class FileHandler {
             files.add(file.getName());
         }
         return files;
+    }
+
+    public void setFileName(String file) {
+        this.fileName = file;
+    }
+
+    public static FileHandler getDefaultFileHandler() {
+        if (FileHandler.fileHandler != null) {
+            return FileHandler.fileHandler;
+        }
+        return new FileHandler();
     }
 }
