@@ -1,4 +1,7 @@
 package business;
 
-public class Text {
+interface Text {
+
+    String operation(String textStr);
+
 }
