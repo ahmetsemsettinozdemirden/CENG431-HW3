@@ -1,4 +1,4 @@
 package presentation;
 
-public class CLI {
+public class Console {
 }
