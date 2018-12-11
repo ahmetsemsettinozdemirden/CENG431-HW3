@@ -5,7 +5,6 @@ import business.TextCounter;
 import business.TextEditor;
 import business.TextSearch;
 
-import java.util.List;
 import java.util.Scanner;
 
 public class Console {
@@ -146,7 +145,7 @@ public class Console {
         }
 
         System.out.print("Searched characters:\n");
-        String result = textSearch.operation(scanner.nextLine());
+        String result = textSearch.operation(scanner.nextLine()); // textSearch must have 2 inputs? one is searched word; second is where to search?
         System.out.print(result + "\n\nSearching is performed!");
     }
 
