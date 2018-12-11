@@ -27,4 +27,7 @@ public class TextEditor implements Text {
         return textList.remove(text);
     }
 
+    public List<Text> getTextList() {
+        return textList;
+    }
 }
