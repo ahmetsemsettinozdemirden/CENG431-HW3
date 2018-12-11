@@ -3,6 +3,7 @@ package presentation;
 import business.TextCorrection;
 import business.TextCounter;
 import business.TextEditor;
+import business.TextSearch;
 
 import java.util.List;
 import java.util.Scanner;
@@ -46,7 +47,7 @@ public class Console {
                         textCount();
                         break;
                     case TEXT_SEARCHED:
-                        textSearch();
+                        textSearchAndList();
                         break;
                 }
             } catch (Exception e) {
@@ -117,20 +118,39 @@ public class Console {
     }
 
     private void textCorrect() {
-
+        TextCorrection textCorrection = new TextCorrection();
+        if (textEditor.getTextList().contains(textCorrection)) {
+            System.out.print("Already corrected!");
+        } else {
+            textEditor.add(textCorrection);
+            String result = textCorrection.operation(getString());
+            System.out.print(result + "\n\nCorrection is performed!");
+        }
     }
 
     private void textCount() {
-
+        TextCounter textCounter = new TextCounter();
+        if (textEditor.getTextList().contains(textCounter)) {
+            System.out.print("Already counted!");
+        } else {
+            textEditor.add(textCounter);
+            String result = textCounter.operation(getString());
+            System.out.print(result + "\n\nCounting is performed!");
+        }
     }
 
-    private void textSearch() {
+    private void textSearchAndList() {
+        TextSearch textSearch = new TextSearch();
+        if (!textEditor.getTextList().contains(textEditor)) {
+            textEditor.add(textSearch);
+        }
 
+        System.out.print("Searched characters:\n");
+        String result = textSearch.operation(scanner.nextLine());
+        System.out.print(result + "\n\nSearching is performed!");
     }
 
-    private void getString() {
-
+    private String getString() { // can string be an empty string?
+        return userString;
     }
-
-
 }
