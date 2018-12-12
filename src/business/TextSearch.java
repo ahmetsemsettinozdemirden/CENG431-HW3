@@ -16,11 +16,7 @@ public class TextSearch implements Text {
         Map<String, Integer> result = new HashMap<>();
         for (String word : text.split(" ")) {
             if (word.contains(textStr)) {
-                if (result.get(word) != null) {
-                    result.put(word, result.get(word) + 1);
-                } else {
-                    result.put(word, 1);
-                }
+                result.merge(word, 1, (a, b) -> a + b);
             }
         }
         return mapToString(result);
