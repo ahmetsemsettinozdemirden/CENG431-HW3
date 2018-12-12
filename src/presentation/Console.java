@@ -18,7 +18,7 @@ public class Console {
         TEXT_CORRECTED,
         TEXT_COUNTED,
         TEXT_SEARCHED,
-        TEST_SAVE,
+        TEXT_SAVE,
     }
 
     private CommandState currentState;
@@ -29,7 +29,6 @@ public class Console {
 
     public Console() {
         this.scanner = new Scanner(System.in);
-        this.textEditor = new TextEditor();
         this.userString = "";
         this.fileHandler = new FileHandler();
     }
@@ -40,6 +39,7 @@ public class Console {
             try {
                 switch (currentState) {
                     case MAIN_MENU:
+                        this.textEditor = new TextEditor();
                         mainMenu();
                         break;
                     case TEXT_SELECTED:
@@ -54,7 +54,7 @@ public class Console {
                     case TEXT_SEARCHED:
                         textSearchAndList();
                         break;
-                    case TEST_SAVE:
+                    case TEXT_SAVE:
                         saveFile();
                         break;
                 }
@@ -97,7 +97,7 @@ public class Console {
                 "3) Search, list and count the words containing inputted characters\n" +
                 "4) Save changes\n" +
                 "5) Back to MainMenu\n" +
-                "Choose operation to apply: ");
+                "Choose an operation to apply: ");
 
         try {
             switch (Integer.parseInt(scanner.nextLine())) {
@@ -111,7 +111,7 @@ public class Console {
                     this.currentState = CommandState.TEXT_SEARCHED;
                     break;
                 case 4:
-                    this.currentState = CommandState.TEST_SAVE;
+                    this.currentState = CommandState.TEXT_SAVE;
                     break;
                 case 5:
                     this.currentState = CommandState.MAIN_MENU;
@@ -121,42 +121,36 @@ public class Console {
                     System.out.println("Invalid choice.\n");
             }
         } catch (Exception e) {
-            System.out.print("Please Enter A Number: ");
+            System.out.print("Please enter a number: ");
         }
-
     }
 
     private void textCorrect() {
         Text textCorrection = new TextCorrection();
-        if (textEditor.getTextList().contains(textCorrection)) {
+        if (textEditor.hasClass(TextCorrection.class)) {
             System.out.println("Already corrected!");
         } else {
             textEditor.add(textCorrection);
-            this.userString = textCorrection.operation(getString());
-            System.out.println(userString + "\n\nCorrection is performed!");
+            System.out.println(textCorrection.operation(getString()) + "\nCorrection is performed!");
         }
+        this.currentState = CommandState.TEXT_SELECTED;
     }
 
     private void textCount() {
         Text textCounter = new TextCounter();
-        if (textEditor.getTextList().contains(textCounter)) {
-            System.out.println("Already counted!");
-        } else {
+        if (!textEditor.hasClass(TextCounter.class))
             textEditor.add(textCounter);
-            String result = textCounter.operation(getString());
-            System.out.println(result + "\n\nCounting is performed!");
-        }
+        String result = textCounter.operation(getString());
+        System.out.println(result + "\nCounting is performed!");
         this.currentState = CommandState.TEXT_SELECTED;
     }
 
     private void textSearchAndList() {
         Text textSearch = new TextSearch(userString);
-        if (!textEditor.getTextList().contains(textEditor)) {
+        if (!textEditor.hasClass(TextSearch.class))
             textEditor.add(textSearch);
-        }
-
         System.out.println("Searched characters:");
-        String result = textSearch.operation(scanner.nextLine()); // textSearch must have 2 inputs? one is searched word; second is where to search?
+        String result = textSearch.operation(scanner.nextLine());
         System.out.println(result + "Searching is performed!");
         this.currentState = CommandState.TEXT_SELECTED;
     }
@@ -182,7 +176,7 @@ public class Console {
         this.currentState = CommandState.TEXT_SELECTED;
     }
 
-    private String getString() { // can string be an empty string?
+    private String getString() {
         return userString;
     }
 }

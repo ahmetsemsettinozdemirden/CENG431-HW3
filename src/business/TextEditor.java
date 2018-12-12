@@ -30,4 +30,11 @@ public class TextEditor implements Text {
     public List<Text> getTextList() {
         return textList;
     }
+
+    public boolean hasClass(Class clazz) {
+        for (Text text: textList)
+            if (text.getClass().equals(clazz))
+                return true;
+        return false;
+    }
 }

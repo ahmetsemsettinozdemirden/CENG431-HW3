@@ -48,7 +48,7 @@ public class FileHandler {
 		StringBuilder contentBuilder = new StringBuilder();
 
 		try (Stream<String> stream = Files.lines(Paths.get(filePath), StandardCharsets.UTF_8)) {
-			stream.forEach(s -> contentBuilder.append(s).append("\n"));
+			stream.forEach(s -> contentBuilder.append(s).append(" \n"));
 		} catch (IOException e) {
 			e.printStackTrace();
 			// todo throw io exception file does not exists
