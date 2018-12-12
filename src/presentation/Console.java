@@ -94,7 +94,7 @@ public class Console {
                 "3) Search, list and count the words containing inputted characters\n" +
                 "4) Save changes\n" +
                 "5) Back to MainMenu\n" +
-                "Choose operation to apply: ");
+                "Choose an operation to apply: ");
 
         try {
             switch (Integer.parseInt(scanner.nextLine())) {
@@ -118,7 +118,7 @@ public class Console {
                     System.out.println("Invalid choice.\n");
             }
         } catch (Exception e) {
-            System.out.print("Please Enter A Number: ");
+            System.out.print("Please enter a number: ");
         }
 
     }
@@ -153,7 +153,7 @@ public class Console {
         }
 
         System.out.println("Searched characters:");
-        String result = textSearch.operation(scanner.nextLine()); // textSearch must have 2 inputs? one is searched word; second is where to search?
+        String result = textSearch.operation(scanner.nextLine());
         System.out.println(result + "Searching is performed!");
         this.currentState = CommandState.TEXT_SELECTED;
     }
