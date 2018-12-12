@@ -1,6 +1,6 @@
 package business;
 
-interface Text {
+public interface Text {
 
     String operation(String textStr);
 
