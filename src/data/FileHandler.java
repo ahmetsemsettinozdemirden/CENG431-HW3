@@ -6,9 +6,6 @@ import java.nio.charset.StandardCharsets;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
-import java.util.ArrayList;
-import java.util.List;
-import java.util.Objects;
 import java.util.stream.Stream;
 
 public class FileHandler {
@@ -25,33 +22,24 @@ public class FileHandler {
         if (!this.storage.exists()) {
             // if not create files folder
             if (this.storage.mkdirs()) {
-                // TODO: throw io exception
+				throw new RuntimeException("Error while creating " + directoryName + " folder.");
             }
         }
         Path path = Paths.get(this.directoryName + "/" + fileName);
         try {
             Files.write(path, text.getBytes());
         } catch (IOException e) {
-            e.printStackTrace();
-        }
-    }
-
-    public List<String> getAllFiles() {
-        List<String> files = new ArrayList<>();
-        for (File file : Objects.requireNonNull(storage.listFiles())) {
-            files.add(file.getName());
-        }
-        return files;
+			throw new RuntimeException(e);
+		}
     }
 
 	public String readFromFile(String filePath) {
 		StringBuilder contentBuilder = new StringBuilder();
 
 		try (Stream<String> stream = Files.lines(Paths.get(filePath), StandardCharsets.UTF_8)) {
-			stream.forEach(s -> contentBuilder.append(s).append("\n"));
+			stream.forEach(s -> contentBuilder.append(s).append(" \n"));
 		} catch (IOException e) {
-			e.printStackTrace();
-			// todo throw io exception file does not exists
+			throw new RuntimeException("Error while reading file content at path: " + filePath);
 		}
 
 		return contentBuilder.toString();
