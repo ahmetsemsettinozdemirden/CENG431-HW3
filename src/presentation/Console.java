@@ -6,6 +6,7 @@ import business.TextEditor;
 import business.TextSaver;
 import business.TextSearch;
 import data.FileHandler;
+import business.Text;
 
 import java.util.Scanner;
 
@@ -64,12 +65,12 @@ public class Console {
     }
 
     private void mainMenu() {
+        this.textEditor.getTextList().clear();
 
         System.out.println("     TextEditor - MainMenu \n" +
                 "1) Give a file\n" +
                 "2) Write from console\n" +
                 "3) Exit");
-
         System.out.println("Choose an option: ");
         switch (Integer.parseInt(scanner.nextLine())) {
             case 1:
@@ -126,7 +127,7 @@ public class Console {
     }
 
     private void textCorrect() {
-        TextCorrection textCorrection = new TextCorrection();
+        Text textCorrection = new TextCorrection();
         if (textEditor.getTextList().contains(textCorrection)) {
             System.out.println("Already corrected!");
         } else {
@@ -137,7 +138,7 @@ public class Console {
     }
 
     private void textCount() {
-        TextCounter textCounter = new TextCounter();
+        Text textCounter = new TextCounter();
         if (textEditor.getTextList().contains(textCounter)) {
             System.out.println("Already counted!");
         } else {
@@ -149,7 +150,7 @@ public class Console {
     }
 
     private void textSearchAndList() {
-        TextSearch textSearch = new TextSearch(userString);
+        Text textSearch = new TextSearch(userString);
         if (!textEditor.getTextList().contains(textEditor)) {
             textEditor.add(textSearch);
         }
@@ -161,8 +162,8 @@ public class Console {
     }
 
     private void saveFile() {
-        System.out.println("Please enter full file name (with file extension): ");
-        TextSaver textSaver = new TextSaver(scanner.nextLine());
+		System.out.println("Please enter full file name (with file extension): ");
+        Text textSaver = new TextSaver(scanner.nextLine());
         textSaver.operation(getString());
         System.out.println("\nSuccessfully saved!");
         this.currentState = CommandState.TEXT_SELECTED;
