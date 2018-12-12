@@ -5,6 +5,7 @@ import business.TextCounter;
 import business.TextEditor;
 import business.TextSaver;
 import business.TextSearch;
+import data.FileHandler;
 
 import java.util.Scanner;
 
@@ -23,11 +24,13 @@ public class Console {
     private Scanner scanner;
     private TextEditor textEditor;
     private String userString;
+    private FileHandler fileHandler;
 
     public Console() {
         this.scanner = new Scanner(System.in);
         this.textEditor = new TextEditor();
         this.userString = "";
+        this.fileHandler = new FileHandler();
     }
 
     public void start() {
@@ -71,8 +74,7 @@ public class Console {
         switch (Integer.parseInt(scanner.nextLine())) {
             case 1:
                 this.currentState = CommandState.TEXT_SELECTED;
-                // TODO: take the file and save it; set it to userString
-                System.out.println("File is saved.");
+                textFromFile();
                 break;
             case 2:
                 this.currentState = CommandState.TEXT_SELECTED;
@@ -159,7 +161,7 @@ public class Console {
     }
 
     private void saveFile() {
-        System.out.println("Please enter file name: ");
+        System.out.println("Please enter full file name (with file extension): ");
         TextSaver textSaver = new TextSaver(scanner.nextLine());
         textSaver.operation(getString());
         System.out.println("\nSuccessfully saved!");
@@ -169,6 +171,13 @@ public class Console {
     private void textFromConsole() {
         System.out.print("Please enter text to edit: ");
         this.userString = scanner.nextLine();
+        this.currentState = CommandState.TEXT_SELECTED;
+    }
+
+    private void textFromFile() {
+        System.out.print("Please enter file path to get text (absolute or relative path): ");
+        String filePath = scanner.nextLine();
+        this.userString = fileHandler.readFromFile(filePath);
         this.currentState = CommandState.TEXT_SELECTED;
     }
 
