@@ -174,7 +174,12 @@ public class Console {
 
     private void saveFile() {
 		System.out.println("Please enter full file name (with file extension): ");
-        Text textSaver = new TextSaver(scanner.nextLine());
+        String fileName = scanner.nextLine();
+        if (fileName.equals("")) {
+            System.out.println("File name can't be empty.");
+            return;
+        }
+        Text textSaver = new TextSaver(fileName);
         textSaver.operation(getString());
         System.out.println("\nSuccessfully saved!");
         this.currentState = CommandState.TEXT_SELECTED;
