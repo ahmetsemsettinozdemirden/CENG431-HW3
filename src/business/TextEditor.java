@@ -13,10 +13,10 @@ public class TextEditor implements Text {
 
     @Override
     public String operation(String textStr) {
-        String result = "";
+        StringBuilder result = new StringBuilder();
         for (Text text: textList)
-            result += text.operation(textStr);
-        return result;
+            result.append(text.operation(textStr));
+        return result.toString();
     }
 
     public boolean add(Text text) {

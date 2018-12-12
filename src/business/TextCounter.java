@@ -17,12 +17,7 @@ public class TextCounter implements Text {
         int lineCount = documentCounter.countLine(textStr);
         int paragraphCount = documentCounter.countParagraph(textStr);
 
-        String result = "Counted char: " + charCount + "\n" +
-                "Counted word: " + wordCount + "\n" +
-                "Counted line: " + lineCount + "\n" +
-                "Counted paragraph: " + paragraphCount + "\n";
-
-        return result;
+        return "Counted char: " + charCount + "\n" + "Counted word: " + wordCount + "\n" + "Counted line: " + lineCount + "\n" + "Counted paragraph: " + paragraphCount + "\n";
     }
 
 }
