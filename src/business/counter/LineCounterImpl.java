@@ -10,6 +10,7 @@ public class LineCounterImpl implements LineCounter {
 
     @Override
     public int countWord(String text) {
+        text = text.replaceAll("\n", "");
         if (text.isEmpty())
             return 0;
         else
