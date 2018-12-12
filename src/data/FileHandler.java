@@ -18,6 +18,14 @@ public class FileHandler {
         this.storage = new File(directoryName);
     }
     public void save(String text, String fileName) {
+
+        // check if files folder exists
+        if (!new File(directoryName).exists()) {
+            // if not create files folder
+            if (new File(directoryName).mkdirs()) {
+                // TODO: throw io error
+            }
+        }
         Path path = Paths.get(this.directoryName + "/" + fileName);
         try {
             Files.write(path, text.getBytes());
