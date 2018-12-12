@@ -5,6 +5,7 @@ import business.TextCounter;
 import business.TextEditor;
 import business.TextSaver;
 import business.TextSearch;
+import business.Text;
 
 import java.util.Scanner;
 
@@ -66,7 +67,7 @@ public class Console {
                 "1) Give a file\n" +
                 "2) Write from console\n" +
                 "3) Exit");
-
+        this.textEditor.getTextList().clear();
         System.out.println("Choose an option: ");
         switch (Integer.parseInt(scanner.nextLine())) {
             case 1:
@@ -124,7 +125,7 @@ public class Console {
     }
 
     private void textCorrect() {
-        TextCorrection textCorrection = new TextCorrection();
+        Text textCorrection = new TextCorrection();
         if (textEditor.getTextList().contains(textCorrection)) {
             System.out.println("Already corrected!");
         } else {
@@ -135,7 +136,7 @@ public class Console {
     }
 
     private void textCount() {
-        TextCounter textCounter = new TextCounter();
+        Text textCounter = new TextCounter();
         if (textEditor.getTextList().contains(textCounter)) {
             System.out.println("Already counted!");
         } else {
@@ -147,7 +148,7 @@ public class Console {
     }
 
     private void textSearchAndList() {
-        TextSearch textSearch = new TextSearch(userString);
+        Text textSearch = new TextSearch(userString);
         if (!textEditor.getTextList().contains(textEditor)) {
             textEditor.add(textSearch);
         }
@@ -160,7 +161,7 @@ public class Console {
 
     private void saveFile() {
         System.out.println("Please enter file name: ");
-        TextSaver textSaver = new TextSaver(scanner.nextLine());
+        Text textSaver = new TextSaver(scanner.nextLine());
         textSaver.operation(getString());
         System.out.println("\nSuccessfully saved!");
         this.currentState = CommandState.TEXT_SELECTED;
