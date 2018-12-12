@@ -64,6 +64,7 @@ public class Console {
                         break;
                 }
             } catch (Exception e) {
+                this.currentState = CommandState.MAIN_MENU;
                 System.out.println("[ERROR] " + e.getMessage() + "\n");
             }
         }
@@ -97,7 +98,7 @@ public class Console {
     private void savedMenu() {
 
         System.out.println("     TextEditor - Text selected menu \n" +
-                "1) Automate text correction\n" +
+                "1) Print current text\n" +
                 "2) Automate text correction\n" +
                 "3) Count number of paragraph, line, word and character\n" +
                 "4) Search, list and count the words containing inputted characters\n" +
@@ -136,12 +137,12 @@ public class Console {
 
     private void textCorrect() {
         Text textCorrection = new TextCorrection();
-        if (textEditor.hasClass(TextCorrection.class)) {
-            System.out.println("Already corrected!");
-        } else {
+//        if (textEditor.hasClass(TextCorrection.class)) {
+//            System.out.println("Already corrected!");
+//        } else {
             textEditor.add(textCorrection);
             System.out.println(textCorrection.operation(getString()) + "\nCorrection is performed!");
-        }
+//        }
         this.currentState = CommandState.TEXT_SELECTED;
     }
 
