@@ -18,7 +18,7 @@ public class Console {
         TEXT_CORRECTED,
         TEXT_COUNTED,
         TEXT_SEARCHED,
-        TEST_SAVE,
+        TEXT_SAVE,
     }
 
     private CommandState currentState;
@@ -131,21 +131,17 @@ public class Console {
             System.out.println("Already corrected!");
         } else {
             textEditor.add(textCorrection);
-            this.userString = textCorrection.operation(getString());
-            System.out.println(userString + "\nCorrection is performed!");
+            System.out.println(textCorrection.operation(getString()) + "\nCorrection is performed!");
         }
         this.currentState = CommandState.TEXT_SELECTED;
     }
 
     private void textCount() {
-        if (textEditor.hasClass(TextCounter.class)) {
-            System.out.println("Already counted!");
-        } else {
-            Text textCounter = new TextCounter();
+        Text textCounter = new TextCounter();
+        if (!textEditor.hasClass(TextCounter.class))
             textEditor.add(textCounter);
-            String result = textCounter.operation(getString());
-            System.out.println(result + "\nCounting is performed!");
-        }
+        String result = textCounter.operation(getString());
+        System.out.println(result + "\nCounting is performed!");
         this.currentState = CommandState.TEXT_SELECTED;
     }
 
