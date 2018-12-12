@@ -3,6 +3,7 @@ package presentation;
 import business.TextCorrection;
 import business.TextCounter;
 import business.TextEditor;
+import business.TextPrinter;
 import business.TextSaver;
 import business.TextSearch;
 import data.FileHandler;
@@ -19,6 +20,7 @@ public class Console {
         TEXT_COUNTED,
         TEXT_SEARCHED,
         TEXT_SAVE,
+        TEXT_PRINT,
     }
 
     private CommandState currentState;
@@ -57,6 +59,9 @@ public class Console {
                     case TEXT_SAVE:
                         saveFile();
                         break;
+                    case TEXT_PRINT:
+                        printText();
+                        break;
                 }
             } catch (Exception e) {
                 System.out.println("[ERROR] " + e.getMessage() + "\n");
@@ -93,27 +98,31 @@ public class Console {
 
         System.out.println("     TextEditor - Text selected menu \n" +
                 "1) Automate text correction\n" +
-                "2) Count number of paragraph, line, word and character\n" +
-                "3) Search, list and count the words containing inputted characters\n" +
-                "4) Save changes\n" +
-                "5) Back to MainMenu\n" +
+                "2) Automate text correction\n" +
+                "3) Count number of paragraph, line, word and character\n" +
+                "4) Search, list and count the words containing inputted characters\n" +
+                "5) Save changes\n" +
+                "6) Back to MainMenu\n" +
                 "Choose an operation to apply: ");
 
         try {
             switch (Integer.parseInt(scanner.nextLine())) {
                 case 1:
-                    this.currentState = CommandState.TEXT_CORRECTED;
+                    this.currentState = CommandState.TEXT_PRINT;
                     break;
                 case 2:
-                    this.currentState = CommandState.TEXT_COUNTED;
+                    this.currentState = CommandState.TEXT_CORRECTED;
                     break;
                 case 3:
-                    this.currentState = CommandState.TEXT_SEARCHED;
+                    this.currentState = CommandState.TEXT_COUNTED;
                     break;
                 case 4:
-                    this.currentState = CommandState.TEXT_SAVE;
+                    this.currentState = CommandState.TEXT_SEARCHED;
                     break;
                 case 5:
+                    this.currentState = CommandState.TEXT_SAVE;
+                    break;
+                case 6:
                     this.currentState = CommandState.MAIN_MENU;
                     break;
                 default:
@@ -152,6 +161,13 @@ public class Console {
         System.out.println("Searched characters:");
         String result = textSearch.operation(scanner.nextLine());
         System.out.println(result + "Searching is performed!");
+        this.currentState = CommandState.TEXT_SELECTED;
+    }
+
+    private void printText() {
+        System.out.println("Your text: ");
+        Text printText = new TextPrinter();
+        System.out.println(printText.operation(this.userString));
         this.currentState = CommandState.TEXT_SELECTED;
     }
 
