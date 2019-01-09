@@ -15,6 +15,7 @@ public class TextSearch implements Text {
     public String operation(String textStr) {
         Map<String, Integer> result = new HashMap<>();
         for (String word : text.split(" ")) {
+            word = word.replaceAll("\n", "");
             if (word.contains(textStr)) {
                 if (result.get(word) != null) {
                     result.put(word, result.get(word) + 1);

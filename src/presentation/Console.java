@@ -3,8 +3,11 @@ package presentation;
 import business.TextCorrection;
 import business.TextCounter;
 import business.TextEditor;
+import business.TextPrinter;
 import business.TextSaver;
 import business.TextSearch;
+import data.FileHandler;
+import business.Text;
 
 import java.util.Scanner;
 
@@ -16,18 +19,20 @@ public class Console {
         TEXT_CORRECTED,
         TEXT_COUNTED,
         TEXT_SEARCHED,
-        TEST_SAVE,
+        TEXT_SAVE,
+        TEXT_PRINT,
     }
 
     private CommandState currentState;
     private Scanner scanner;
     private TextEditor textEditor;
     private String userString;
+    private FileHandler fileHandler;
 
     public Console() {
         this.scanner = new Scanner(System.in);
-        this.textEditor = new TextEditor();
         this.userString = "";
+        this.fileHandler = new FileHandler();
     }
 
     public void start() {
@@ -36,6 +41,7 @@ public class Console {
             try {
                 switch (currentState) {
                     case MAIN_MENU:
+                        this.textEditor = new TextEditor();
                         mainMenu();
                         break;
                     case TEXT_SELECTED:
@@ -50,29 +56,32 @@ public class Console {
                     case TEXT_SEARCHED:
                         textSearchAndList();
                         break;
-                    case TEST_SAVE:
+                    case TEXT_SAVE:
                         saveFile();
+                        break;
+                    case TEXT_PRINT:
+                        printText();
                         break;
                 }
             } catch (Exception e) {
+                this.currentState = CommandState.MAIN_MENU;
                 System.out.println("[ERROR] " + e.getMessage() + "\n");
             }
         }
     }
 
     private void mainMenu() {
+        this.textEditor.getTextList().clear();
 
         System.out.println("     TextEditor - MainMenu \n" +
                 "1) Give a file\n" +
                 "2) Write from console\n" +
                 "3) Exit");
-
         System.out.println("Choose an option: ");
         switch (Integer.parseInt(scanner.nextLine())) {
             case 1:
                 this.currentState = CommandState.TEXT_SELECTED;
-                // TODO: take the file and save it; set it to userString
-                System.out.println("File is saved.");
+                textFromFile();
                 break;
             case 2:
                 this.currentState = CommandState.TEXT_SELECTED;
@@ -89,28 +98,32 @@ public class Console {
     private void savedMenu() {
 
         System.out.println("     TextEditor - Text selected menu \n" +
-                "1) Automate text correction\n" +
-                "2) Count number of paragraph, line, word and character\n" +
-                "3) Search, list and count the words containing inputted characters\n" +
-                "4) Save changes\n" +
-                "5) Back to MainMenu\n" +
-                "Choose operation to apply: ");
+                "1) Print current text\n" +
+                "2) Automate text correction\n" +
+                "3) Count number of paragraph, line, word and character\n" +
+                "4) Search, list and count the words containing inputted characters\n" +
+                "5) Save changes\n" +
+                "6) Back to MainMenu\n" +
+                "Choose an operation to apply: ");
 
         try {
             switch (Integer.parseInt(scanner.nextLine())) {
                 case 1:
-                    this.currentState = CommandState.TEXT_CORRECTED;
+                    this.currentState = CommandState.TEXT_PRINT;
                     break;
                 case 2:
-                    this.currentState = CommandState.TEXT_COUNTED;
+                    this.currentState = CommandState.TEXT_CORRECTED;
                     break;
                 case 3:
-                    this.currentState = CommandState.TEXT_SEARCHED;
+                    this.currentState = CommandState.TEXT_COUNTED;
                     break;
                 case 4:
-                    this.currentState = CommandState.TEST_SAVE;
+                    this.currentState = CommandState.TEXT_SEARCHED;
                     break;
                 case 5:
+                    this.currentState = CommandState.TEXT_SAVE;
+                    break;
+                case 6:
                     this.currentState = CommandState.MAIN_MENU;
                     break;
                 default:
@@ -118,49 +131,55 @@ public class Console {
                     System.out.println("Invalid choice.\n");
             }
         } catch (Exception e) {
-            System.out.print("Please Enter A Number: ");
+            System.out.print("Please enter a number: ");
         }
-
     }
 
     private void textCorrect() {
-        TextCorrection textCorrection = new TextCorrection();
-        if (textEditor.getTextList().contains(textCorrection)) {
-            System.out.println("Already corrected!");
-        } else {
+        Text textCorrection = new TextCorrection();
+//        if (textEditor.hasClass(TextCorrection.class)) {
+//            System.out.println("Already corrected!");
+//        } else {
             textEditor.add(textCorrection);
-            this.userString = textCorrection.operation(getString());
-            System.out.println(userString + "\n\nCorrection is performed!");
-        }
+            System.out.println(textCorrection.operation(getString()) + "\nCorrection is performed!");
+//        }
+        this.currentState = CommandState.TEXT_SELECTED;
     }
 
     private void textCount() {
-        TextCounter textCounter = new TextCounter();
-        if (textEditor.getTextList().contains(textCounter)) {
-            System.out.println("Already counted!");
-        } else {
+        Text textCounter = new TextCounter();
+        if (!textEditor.hasClass(TextCounter.class))
             textEditor.add(textCounter);
-            String result = textCounter.operation(getString());
-            System.out.println(result + "\n\nCounting is performed!");
-        }
+        String result = textCounter.operation(getString());
+        System.out.println(result + "\nCounting is performed!");
         this.currentState = CommandState.TEXT_SELECTED;
     }
 
     private void textSearchAndList() {
-        TextSearch textSearch = new TextSearch(userString);
-        if (!textEditor.getTextList().contains(textEditor)) {
+        Text textSearch = new TextSearch(userString);
+        if (!textEditor.hasClass(TextSearch.class))
             textEditor.add(textSearch);
-        }
-
         System.out.println("Searched characters:");
-        String result = textSearch.operation(scanner.nextLine()); // textSearch must have 2 inputs? one is searched word; second is where to search?
+        String result = textSearch.operation(scanner.nextLine());
         System.out.println(result + "Searching is performed!");
         this.currentState = CommandState.TEXT_SELECTED;
     }
 
+    private void printText() {
+        System.out.println("Your text: ");
+        Text printText = new TextPrinter();
+        System.out.println(printText.operation(this.userString));
+        this.currentState = CommandState.TEXT_SELECTED;
+    }
+
     private void saveFile() {
-        System.out.println("Please enter file name: ");
-        TextSaver textSaver = new TextSaver(scanner.nextLine());
+		System.out.println("Please enter full file name (with file extension): ");
+        String fileName = scanner.nextLine();
+        if (fileName.equals("")) {
+            System.out.println("File name can't be empty.");
+            return;
+        }
+        Text textSaver = new TextSaver(fileName);
         textSaver.operation(getString());
         System.out.println("\nSuccessfully saved!");
         this.currentState = CommandState.TEXT_SELECTED;
@@ -172,7 +191,14 @@ public class Console {
         this.currentState = CommandState.TEXT_SELECTED;
     }
 
-    private String getString() { // can string be an empty string?
+    private void textFromFile() {
+        System.out.print("Please enter file path to get text (absolute or relative path): ");
+        String filePath = scanner.nextLine();
+        this.userString = fileHandler.readFromFile(filePath);
+        this.currentState = CommandState.TEXT_SELECTED;
+    }
+
+    private String getString() {
         return userString;
     }
 }
